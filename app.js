@@ -61,8 +61,10 @@ var post_template = jade.compile(post_template);
 io.sockets.on('connection', function (socket) {
   socket.on('post', function(data) {
     console.log("Message received: " + JSON.stringify(data));
-    io.sockets.emit('post', post_template({post: data}));
-    posts.save(data);
+    if (data.name && data.message) {
+      io.sockets.emit('post', post_template({post: data}));
+      posts.save(data);
+    }
   })
 });
 

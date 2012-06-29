@@ -1,3 +1,5 @@
+p NOTE: This is public, and publishes in real-time to everyone, and gets stored. Don't abuse it please!
+br
 form#input
   p.control
     label(for='name')
@@ -26,6 +28,8 @@ script
     $new_post.slideDown();
   });
   $form.on('submit', function(evt) {
-    socket.emit('post', {name: $name.val(), message: $message.val()});
+    var name = $name.val(), message = $message.val();
+    if (!name || !message) return;
+    socket.emit('post', {name: name, message: message});
     return false;
   })
