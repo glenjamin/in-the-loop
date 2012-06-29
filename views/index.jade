@@ -14,15 +14,18 @@ dl.posts#posts
 script(src="/socket.io/socket.io.js")
 script(src="/javascripts/jquery-1.7.2.min.js")
 script
-  var form = $('#input');
-  var posts = $('#posts');
-  var name = $('#name');
-  var message = $('#message');
+  var $form = $('#input');
+  var $posts = $('#posts');
+  var $name = $('#name');
+  var $message = $('#message');
   var socket = io.connect('http://#{host}');
   socket.on('post', function (html) {
-    posts.html(html + posts.html());
+    var $new_post = $(html);
+    $new_post.hide();
+    $posts.prepend($new_post);
+    $new_post.slideDown();
   });
-  form.on('submit', function(evt) {
-    socket.emit('post', {name: name.val(), message: message.val()});
+  $form.on('submit', function(evt) {
+    socket.emit('post', {name: $name.val(), message: $message.val()});
     return false;
   })

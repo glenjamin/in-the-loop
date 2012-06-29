@@ -43,7 +43,7 @@ try {
   posts = [];
 }
 posts.save = function(item) {
-  this.push(item);
+  this.unshift(item);
   fs.writeFileSync(POSTS_DATA, JSON.stringify(this));
 }
 
