@@ -29,7 +29,11 @@ script
   });
   $form.on('submit', function(evt) {
     var name = $name.val(), message = $message.val();
-    if (!name || !message) return;
+    if (!name || !message) {
+      alert('You must supply a name and a message');
+      return;
+    }
+    $message.val('');
     socket.emit('post', {name: name, message: message});
     return false;
   })
