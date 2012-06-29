@@ -1,0 +1,28 @@
+form#input
+  p.control
+    label(for='name')
+      | Name
+      input#name(type='text')
+  p.control
+    textarea#message(rows=5, cols=40)
+  p.control
+    input(type='submit', value='Post')
+
+dl.posts#posts
+  != partial('post', posts)
+
+script(src="/socket.io/socket.io.js")
+script(src="/javascripts/jquery-1.7.2.min.js")
+script
+  var form = $('#input');
+  var posts = $('#posts');
+  var name = $('#name');
+  var message = $('#message');
+  var socket = io.connect('http://#{host}');
+  socket.on('post', function (html) {
+    posts.html(html + posts.html());
+  });
+  form.on('submit', function(evt) {
+    socket.emit('post', {name: name.val(), message: message.val()});
+    return false;
+  })
