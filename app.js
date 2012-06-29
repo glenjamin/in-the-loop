@@ -71,8 +71,8 @@ io.sockets.on('connection', function (socket) {
     }
     limits[socket.id] = now;
     if (data.name && data.message) {
-      io.sockets.emit('post', post_template({post: data}));
       posts.save(data);
+      io.sockets.emit('post', post_template({post: data}));
     }
   })
 });
