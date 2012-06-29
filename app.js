@@ -58,9 +58,18 @@ app.get('/', function(req, res){
 
 var post_template = fs.readFileSync(__dirname + '/views/post.jade', 'utf8');
 var post_template = jade.compile(post_template);
+
+var limits = {};
 io.sockets.on('connection', function (socket) {
+  limits[socket.id] = new Date();
   socket.on('post', function(data) {
     console.log("Message received: " + JSON.stringify(data));
+    var now = new Date();
+    if ((now - limits[socket.id]) < 5000) {
+      console.log("Rate limit reached for "+socket.id+", discarding message");
+      return;
+    }
+    limits[socket.id] = now;
     if (data.name && data.message) {
       io.sockets.emit('post', post_template({post: data}));
       posts.save(data);
